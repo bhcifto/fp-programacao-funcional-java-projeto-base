@@ -28,7 +28,7 @@ public class Aula06 extends Aula {
      * Este deve ser um predicado composto usando {@link Predicate#and(Predicate)}.
      * Você deve trocar o valor armazenado ao atributo para ele seguir a regra definida acima.
      */
-    private final Predicate<Estudante> mulheresAprovadas = null; //TODO: Atribua aqui o predicado composto com o filtro indicado acima
+    private final Predicate<Estudante> mulheresAprovadas; //TODO: Atribua aqui o predicado composto com o filtro indicado acima
 
     /**
      * Você pode chamar os métodos existentes e outros que você criar aqui,
@@ -37,7 +37,27 @@ public class Aula06 extends Aula {
      * do IntelliJ e selecione a opção "Run All Tests".
      */
     public Aula06() {
-        //TODO: Insira chamdas das funções existentes aqui, para você conferir como estão funcionando
+        Predicate<Estudante> isMulher = estudante -> estudante.getSexo() == 'F';
+        Predicate<Estudante> isAprovada = estudante -> estudante.getNota() >= 6.0;
+        this.mulheresAprovadas = isMulher.and(isAprovada);
+
+        System.out.println("--- Mulheres Aprovadas ---");
+        getEstudantesMulheresAprovadas().forEach(System.out::println);
+
+        System.out.println("\n\n--- Mulheres Aprovadas (Ordenado por Curso e Nota) ---");
+        getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota().forEach(System.out::println);
+
+        System.out.println("\n\n--- Mulheres Aprovadas (Ordenado por Curso DEsc e Nota Cres) ---");
+        getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente().forEach(System.out::println);
+
+        System.out.println("\n\n--- Mulheres Aprovadas (Não ordenadas, modificável) ---");
+        getEstudantesMulheresAprovadasNaoOrdenadasModificavel().forEach(System.out::println);
+
+        System.out.println("\n\n--- Mulheres Aprovadas (Ordenadas Desc) ---");
+        getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente().forEach(System.out::println);
+
+        System.out.println("\n\n--- Mulheres Aprovadas (Ordenadas curso cres, nota desc) ---");
+        getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente().forEach(System.out::println);
     }
 
     /**
@@ -56,8 +76,9 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadas() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -67,8 +88,11 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .sorted(Comparator.comparing(Estudante::getCurso)
+                                  .thenComparingDouble(Estudante::getNota))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -78,8 +102,11 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .sorted(Comparator.comparing(Estudante::getCurso).reversed()
+                                  .thenComparingDouble(Estudante::getNota))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -90,8 +117,9 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasNaoOrdenadasModificavel() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -101,8 +129,11 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .sorted(Comparator.comparing(Estudante::getCurso).reversed()
+                                  .thenComparing(Comparator.comparingDouble(Estudante::getNota).reversed()))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -112,7 +143,10 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes().stream()
+                .filter(mulheresAprovadas)
+                .sorted(Comparator.comparing(Estudante::getCurso)
+                                  .thenComparing(Comparator.comparingDouble(Estudante::getNota).reversed()))
+                .collect(Collectors.toUnmodifiableList());
     }
 }
